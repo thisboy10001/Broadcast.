@@ -1,0 +1,11 @@
+{
+    "name": "user-form-project",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "start": "node api/process.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    }
+}
