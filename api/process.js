@@ -1,37 +1,33 @@
-import express from 'express';
-
+const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
 
-let userData = []; // Tableau pour stocker les données
+app.use(express.json()); // Pour parser les données JSON du body
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+let userData = []; // Tableau pour stocker les données des utilisateurs
 
-// Route pour traiter le formulaire
+// Route POST pour recevoir les données du formulaire
 app.post('/api/process', (req, res) => {
+    console.log("Requête POST reçue");
     const { name, phone } = req.body;
-    console.log(`Données reçues - Nom: ${name}, Numéro de téléphone: ${phone}`); // Log des données reçues
+    console.log(`Données reçues - Nom: ${name}, Téléphone: ${phone}`);
 
     if (!name || !phone) {
+        console.log("Données manquantes");
         return res.status(400).json({ message: 'Nom et numéro sont requis.' });
     }
 
-    userData.push({ name, phone }); // Ajouter les données au tableau
-    console.log("Données stockées :", userData); // Afficher les données stockées
-    res.json({ message: `Nom: ${name}, Numéro de téléphone: ${phone}` });
+    userData.push({ name, phone });
+    console.log("Données stockées :", userData);
+    res.json({ message: `Nom: ${name}, Téléphone: ${phone}` });
 });
 
-// Route pour afficher les utilisateurs
+// Route GET pour afficher les utilisateurs enregistrés
 app.get('/api/users', (req, res) => {
-    console.log("Utilisateurs actuels:", userData); // Log des utilisateurs stockés
-    res.json(userData); // Retourner les données stockées
+    console.log("Requête GET reçue pour /api/users");
+    res.json(userData);
 });
 
-// Démarrer le serveur
-app.listen(port, () => {
-    console.log(`Serveur en écoute sur http://localhost:${port}`);
+// Écouter sur un port (optionnel selon ta configuration Vercel)
+app.listen(3000, () => {
+    console.log('Serveur démarré sur le port 3000');
 });
-
-// Exporter la fonction pour Vercel
-export default app;
